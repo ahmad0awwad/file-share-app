@@ -1,16 +1,16 @@
-name: Deploy React App to GitHub Pages
+name: Deploy Next.js to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -19,15 +19,17 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: frontend
         run: npm install
 
-      - name: Build the React app
-        working-directory: ./frontend
-        run: npm run build
+      - name: Build and Export
+        working-directory: frontend
+        run: |
+          npm run build
+          npm run export
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
-          branch: gh-pages  # target branch for GitHub Pages
-          folder: frontend/build  # folder to deploy
+          branch: gh-pages
+          folder: frontend/out
